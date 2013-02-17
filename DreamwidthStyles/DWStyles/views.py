@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 
 from DWStyles.models import *
 from DWStyles.forms import *
@@ -63,6 +63,42 @@ def stats(request):
 
     return render_to_response('stats.html', c,
         context_instance=RequestContext(request))
+
+class DWLayoutListView(ListView):
+
+    model = DWLayout
+    context_object_name = "layout_list"
+    paginate_by = 25
+
+    def get_queryset(self):
+        layout_list = DWLayout.objects.all()
+
+        self.filters = []
+
+        if "filter" in self.request.GET:
+            filternames = self.request.GET.getlist("filter")
+            for filtername in filternames:
+                try:
+                    property_filter = StyleProperty.objects.get(codename = filtername)
+                    self.filters.append(property_filter)
+                    layout_list = layout_list.filter(properties__pk = property_filter.pk)
+                except:
+                    pass
+        
+        return layout_list
+
+    def get_context_data(self, **kwargs):
+        c = super(DWLayoutListView, self).get_context_data(**kwargs)
+
+        filterform = LayoutPropertyFilterForm(initial = {
+            "filter": [filter.codename for filter in self.filters] })
+
+        c.update({
+            "filterform": filterform,
+            "applied_filters": self.filters,
+        })
+
+        return c
 
 def layout_list(request, page=1):
 

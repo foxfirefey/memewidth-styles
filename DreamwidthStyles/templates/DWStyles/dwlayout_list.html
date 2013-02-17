@@ -4,6 +4,10 @@
 Layout List | Dreamwidth Styles
 {% endblock %}
 
+{% block page_title %}
+Layout List
+{% endblock %}
+
 {% block extrahead %}
 <style type="text/css">
 .filter ul li {
@@ -66,25 +70,26 @@ Layout List | Dreamwidth Styles
 <div class="clear"></div>
 </div>
 
-<div class="pagination">
-<p>Layouts listed in alphabetical order.  Total layouts: {{ layouts.paginator.count }}</p>
-    <span class="step-links">
-        {% if layouts.has_previous %}
-            <a href="{% url "layout_list" page=layouts.previous_page_number %}">previous</a>
-        {% endif %}
+{% if applied_filters %}
+<div class="applied-filters">
+<h3>Applied filters</h3>
+<ul>
+{% for applied_filter in applied_filters %}
+{{ applied_filter }}
+{% endfor %}
+</ul>
+</div>
+{% endif %}
 
-        <span class="current">
-            Page {{ layouts.number }} of {{ layouts.paginator.num_pages }}.
-        </span>
-
-        {% if layouts.has_next %}
-            <a href="{% url "layout_list" page=layouts.next_page_number %}">next</a>
-        {% endif %}
-    </span>
+<div class="pagination top">
+<p>Layouts listed in alphabetical order.  Total layouts: {{ paginator.count }}</p>
+{% with "layout_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
 </div>
 
 <ul class="layoutlist">
-{% for layout in layouts.object_list %}
+{% for layout in layout_list %}
 <li class="layoutbox">
 <h3 class="layout-title"><a href="{{layout.get_absolute_url}}">{{ layout.name }}</a>
 ({{layout.number_themes|default:"no"}} theme{{ layout.number_themes|pluralize }}) 
@@ -122,19 +127,8 @@ Preview
 </ul>
 
 <div class="pagination">
-<p>Layouts listed in alphabetical order.  Total layouts: {{ layouts.paginator.count }}</p>
-    <span class="step-links">
-        {% if layouts.has_previous %}
-            <a href="{% url "layout_list" page=layouts.previous_page_number %}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ layouts.number }} of {{ layouts.paginator.num_pages }}.
-        </span>
-
-        {% if layouts.has_next %}
-            <a href="{% url "layout_list" page=layouts.next_page_number %}">next</a>
-        {% endif %}
-    </span>
+{% with "layout_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
 </div>
 {% endblock %}

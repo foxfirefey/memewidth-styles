@@ -12,7 +12,6 @@ urlpatterns = patterns('DWStyles.views',
     url(r'^stats/$', 'stats', name="stats"),
 
     # list views
-    url(r'^layouts/(?P<page>[0-9]+)?$', "layout_list", name="layout_list"),
     url(r'^themes/(?P<page>[0-9]+)?$', "theme_list", name="theme_list"),
     url(r'^colors/(?P<page>[0-9]+)?$', "color_list", name="color_list"),
 
@@ -26,6 +25,7 @@ urlpatterns = patterns('DWStyles.views',
 # Class based generic views
 urlpatterns += patterns('',
     # list views
+    url(r'^layouts$', DWLayoutListView.as_view(), name="layout_list"),
     
     # detail views
     url(r'^color/(?P<slug>[a-fA-F0-9]+)$', ColorPropertyDetailView.as_view(), name='color_view'),

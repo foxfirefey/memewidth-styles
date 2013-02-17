@@ -1,0 +1,107 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} -- Dreamwidth Styles{% endblock %}
+
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin">Home</a> &rsaquo; <a href="/admin/DWStyles/dwthemecolor/">Theme Colors</a> &rsaquo; Copy Layer Colors</div>{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">Dreamwidth Styles Admin</h1>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style type="text/css">
+textarea#id_paste { width: 100%; }
+.color { 
+  float: left; 
+  border: 2px solid #CCC; 
+  margin: 5px;
+  width: 230px;
+  padding-left: 20px;
+  margin-top: 20px;
+}
+.color>.inner {
+  padding: 5px;
+  background-color: #FFF;
+  border-left: 1px solid #ccc;
+}
+.color.exists>.inner  {
+  background-color: #DDD;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ layer.theme.name }} ("{{ layer.redist_unique}}")</h1>
+
+<form action="{% url "color_layer_copy" %}" method="post">
+
+{% csrf_token %}
+{{ pasteform }}
+{{ color_prefixes }}
+
+{% for color in colorforms %}
+
+<div class="color {{ color.exists|yesno:"exists,noexists" }}" style="background-color: #{{color.color}};">
+<div class="inner">
+<h2>{{ color.color }} {% if color.exists %}(exists){% endif %}</h2>
+
+<div class="variables">
+<h3>Variables</h3>
+{{ color.variables|join:", " }}
+</div>
+
+<div class="form">
+
+<h4>Color</h4>
+{{ color.colorform.as_p }}
+
+{% comment %}
+{{ color.colorform.non_field_errors }}
+
+{% for field in color.colorform.visible_fields %}
+    {% if forloop.first %}
+        {% for hidden in colorform.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+    {% endif %}
+    
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }}: {{ field }}
+    </div>
+{% endfor %}
+{% endcomment %}
+
+<h4>Theme</h4>
+{{ color.themecolorform.as_p }}
+
+{% comment %}
+{{ color.themecolorform.non_field_errors }}
+
+{% for field in color.themecolorform.visible_fields %}
+    {% if forloop.first %}
+        {% for hidden in themecolorform.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+    {% endif %}
+    
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }}: {{ field }}
+    </div>
+{% endfor %}
+{% endcomment %}
+
+</div>
+</div>
+</div>
+{% endfor %}
+
+<div style="clear: both;" ></div>
+
+<p><input type="submit" name="{{stage}}_stage" value="Onward!" /></p>
+</form>
+
+{% endblock %}

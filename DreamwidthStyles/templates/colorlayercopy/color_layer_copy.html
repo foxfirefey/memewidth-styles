@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} -- Dreamwidth Styles{% endblock %}
+
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin">Home</a> &rsaquo; <a href="/admin/DWStyles/dwthemecolor/">Theme Colors</a> &rsaquo; Copy Layer Colors</div>{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">Dreamwidth Styles Admin</h1>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style type="text/css">
+textarea#id_paste { width: 100%; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<form action="{% url "color_layer_copy" %}" method="post">
+
+{% csrf_token %}
+{{ pasteform.as_p }}
+
+<p><input type="submit" name="{{stage}}_stage" value="Onward!" /></p>
+</form>
+
+{% endblock %}

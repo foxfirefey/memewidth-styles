@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+Theme List | Dreamwidth Styles
+{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+.filter ul li {
+  width: 200px;
+  float: left;
+  list-style-type: none;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.filter ul li input {
+  margin-left: -20px;
+}
+
+.filter p {
+  clear: both;
+  font-weight: bold;
+}
+
+.filter .submit {
+  float: right;
+}
+
+.filter h3 {
+  cursor: pointer;
+  text-decoration: underline;
+}
+</style>
+
+<script type="text/javascript" src="/media/js/jquery.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+   $(".filter form").hide()
+   $(".filter h3").addClass("collapsed");
+   $(".filter h3").prepend('<span class="icon">&oplus; </span>')
+   
+   $(".filter h3").click(function(event){
+      if( $(".filter h3").hasClass("collapsed") ) {
+        $(".filter h3").addClass("open").removeClass("collapsed");
+        $(".filter form").show();
+        $(".filter h3 .icon").remove()
+        $(".filter h3").prepend('<span class="icon">&otimes; </span>')
+      } else {
+        $(".filter h3").addClass("collapsed").removeClass("show");
+        $(".filter form").hide();
+        $(".filter h3 .icon").remove()
+        $(".filter h3").prepend('<span class="icon">&oplus; </span>')
+     }
+   })
+   
+   
+   
+ });
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div class="filter">
+<h3><span class="icon"></span>Filters</h3>
+{% if filterform %}
+<form method="get">
+{{ filterform.as_p }}
+<div class="clear"></div>
+<input class="submit" type="submit" value="Filter" />
+</form>
+{% else %}
+<p>What?  No filters?</p>
+{% endif %}
+<div class="clear"></div>
+</div>
+
+{% if filters %}
+<div class="filters">
+<ul>
+{% for filter in filters %}
+<li>{{filter}}</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+<div class="pagination">
+<p>Themes appear from newest to oldest. Total themes listed: {{ themes.paginator.count }}</p>
+    <span class="step-links">
+        {% if themes.has_previous %}
+            <a href="{% url "theme_list" page=themes.previous_page_number %}?{{query.urlencode}}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ themes.number }} of {{ themes.paginator.num_pages }}. 
+        </span>
+
+        {% if themes.has_next %}
+            <a href="{% url "theme_list" page=themes.next_page_number %}?{{query.urlencode}}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+{% with themes.object_list as themes %}
+{% include "list_templates/themes.html" %}
+{% endwith %}
+
+<div class="pagination">
+<p>Themes appear from newest to oldest. Total themes listed: {{ themes.paginator.count }}</p>
+    <span class="step-links">
+        {% if themes.has_previous %}
+            <a href="{% url "theme_list" page=themes.previous_page_number %}?{{query.urlencode}}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ themes.number }} of {{ themes.paginator.num_pages }}.
+        </span>
+
+        {% if themes.has_next %}
+            <a href="{% url "theme_list" page=themes.next_page_number %}?{{query.urlencode}}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

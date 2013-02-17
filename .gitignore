@@ -1,0 +1,4 @@
+DreamwidthStyles/wsgi*
+*pyc
+DreamwidthStyles/media
+DreamwidthStyles/s/

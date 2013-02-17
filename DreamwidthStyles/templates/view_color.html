@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+Color: #{{ color.color_hex }}
+{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+
+.infoblock { 
+  float: left;
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+.infoblock h3 {
+  margin-top: 0px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% if color %}
+
+<div class="infocontainer">
+
+<div class="infoblock">
+{% if color.is_round %}
+<h3>Main Color</h3>
+{% else %}
+<h3></h3>
+{% endif %}
+<div style="background-color: #{{ color.color_hex }}; width: 100px; height: 100px; border: 1px solid black;">
+</div>
+
+{% if not color.pk %}
+<p>This color is not in the system!</p>
+{% endif %}
+</div>
+
+<div class="infoblock">
+<h3>Values</h3>
+<ul>
+<li><strong>Red:</strong> {{color.R}}</li>
+<li><strong>Green:</strong> {{color.G}}</li>
+<li><strong>Blue:</strong> {{color.B}}</li>
+<li><strong>Hue:</strong> {{color.H}}&deg;</li>
+<li><strong>Saturation:</strong> {{color.S}}%</li>
+<li><strong>Value:</strong> {{color.V}}%</li>
+</ul>
+</div>
+
+<div class="infoblock">
+{% for similar in color.similar_colors %}
+{% if forloop.first %}
+<h3>Included Colors</h3>
+
+<p>Included in this color theme display:</p>
+
+<div class="colorblocks" style="width: 200px;">
+{% endif %}
+<div style="display: block; float: left; background-color: #{{similar.color_hex}}; border: 1px solid black; width: 20px; height: 20px;"></div>
+{% if forloop.last %}
+</div>
+{% endif %}
+{% endfor %}
+</div>
+<div style="clear: both;"></div>
+</div>
+
+{% if color.pk %}
+<div class="infoblock">
+<h3>Color Categories</h3>
+<ul>
+{% for group in color.groups.all %}
+<li><a href="{{group.get_absolute_url}}">{{group.label}}</a></li>
+{% endfor%}
+</ul>
+</div>
+{% endif %}
+
+<div class="infoblock">
+{% for near in color.near_colors %}
+{% if forloop.first %}
+<h3>Near Colors</h3>
+
+<p>These are the colors in themes closest to the above colors:</p>
+<div class="colorblocks" style="width: 200px;">
+{% endif %}
+<div style="display: block; float: left; background-color: #{{near.color_hex}}; border: 1px solid black; width: 20px; height: 20px;">
+<a style="display: block; width: 20px; height: 20px;" href="{% url "color_view" hex_value=near.color_hex %}" title="#{{near.color_hex}}"></a>
+</div>
+{% if forloop.last %}
+</div>
+
+<div style="clear: both;"></div>
+{% endif %}
+{% endfor %}
+</div>
+
+<div style="clear: both;"></div>
+
+
+{# Now, list what themes use this color as a feature or accent. #}
+
+{% with color.accent_in_themes as accent_themes %}
+{% with color.feature_in_themes as feature_themes %}
+
+{% if accent_themes and feature_themes %}
+<h3>Themes</h3>
+{% endif %}
+
+{% for themecolor in feature_themes %}
+{% with themecolor.theme as theme %}
+
+{% if forloop.first %}
+<h4>Featured ({{feature_themes|length}} themes)</h4>
+
+<div class="themeboxes">
+<ul class="themelist">
+{% endif %}
+
+{% ifchanged theme %}
+{% include "list_templates/themebox.html" %}
+{% endifchanged %}
+
+{% if forloop.last %}
+</ul>
+<div class="clear"></div>
+</div>
+{% endif %}
+{% endwith %}
+{% endfor %}
+
+{% for themecolor in color.accent_in_themes %}
+{% with themecolor.theme as theme %}
+{% if forloop.first %}
+<h4>Accent ({{accent_themes|length}} themes)</h4>
+
+<div class="themeboxes">
+<ul class="themelist">
+{% endif %}
+
+{% ifchanged theme %}
+{% include "list_templates/themebox.html" %}
+{% endifchanged %}
+
+{% if forloop.last %}
+</ul>
+<div class="clear"></div>
+</div>
+{% endif %}
+{% endwith %}
+{% endfor %}
+
+{% endwith %}
+{% endwith %}
+{% else %}
+<h1>Error: no valid color.</h1>
+{% endif %}
+
+{% endblock %}

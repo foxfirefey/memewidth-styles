@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+Layout List | Dreamwidth Styles
+{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+.filter ul li {
+  width: 200px;
+  float: left;
+  list-style-type: none;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.filter ul li input {
+  margin-left: -20px;
+}
+
+.filter .submit {
+  float: right;
+}
+.filter h3 {
+  cursor: pointer;
+  text-decoration: underline;
+}
+</style>
+
+<script type="text/javascript">
+ $(document).ready(function(){
+   $(".filter form").hide()
+   $(".filter h3").addClass("collapsed");
+   $(".filter h3").prepend('<span class="icon">&oplus; </span>')
+   
+   $(".filter h3").click(function(event){
+      if( $(".filter h3").hasClass("collapsed") ) {
+        $(".filter h3").addClass("open").removeClass("collapsed");
+        $(".filter form").show();
+        $(".filter h3 .icon").remove()
+        $(".filter h3").prepend('<span class="icon">&otimes; </span>')
+      } else {
+        $(".filter h3").addClass("collapsed").removeClass("show");
+        $(".filter form").hide();
+        $(".filter h3 .icon").remove()
+        $(".filter h3").prepend('<span class="icon">&oplus; </span>')
+     }
+   })
+   
+ });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="filter">
+<h3>Filters</h3>
+{% if filterform %}
+<form method="get">
+{{ filterform.as_p }}
+<div class="clear"></div>
+<input class="submit" type="submit" value="Filter" />
+</form>
+{% else %}
+<p>What?  No filters?</p>
+{% endif %}
+<div class="clear"></div>
+</div>
+
+<div class="pagination">
+<p>Layouts listed in alphabetical order.  Total layouts: {{ layouts.paginator.count }}</p>
+    <span class="step-links">
+        {% if layouts.has_previous %}
+            <a href="{% url "layout_list" page=layouts.previous_page_number %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ layouts.number }} of {{ layouts.paginator.num_pages }}.
+        </span>
+
+        {% if layouts.has_next %}
+            <a href="{% url "layout_list" page=layouts.next_page_number %}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+<ul class="layoutlist">
+{% for layout in layouts.object_list %}
+<li class="layoutbox">
+<h3 class="layout-title"><a href="{{layout.get_absolute_url}}">{{ layout.name }}</a>
+({{layout.number_themes|default:"no"}} theme{{ layout.number_themes|pluralize }}) 
+</h3>
+{% if layout.example_theme %}
+{% with layout.example_theme as theme %}
+<div class="layouttheme">
+<h4 class="layout-example">Example theme: <a href="{{layout.example_theme.get_absolute_url}}">{{layout.example_theme.name}}</a></h4>
+{{ theme.color_boxes|safe }}
+{% if theme.sysid %}
+<a class="themepreview" target="blank" title="Preview in a different window, if you are logged in"
+href="http://www.dreamwidth.org/customize/preview_redirect?themeid={{ theme.sysid }}" >
+{% endif %}
+{% if theme.thumbnail %}
+<img src="{{ MEDIA_URL }}/{{ theme.thumbnail }}" width="{{theme.thumbnail_width}}" 
+height="{{theme.thumbnail_height}}" style="border: 1px solid black;" />
+{% else %}
+{% if theme.sysid %}
+Preview
+{% endif %}
+{% endif %}
+{% if theme.sysid %}
+</a>
+{% endif %}
+{% endwith %}
+</div>
+{% endif %}
+
+{% if editlinks %}
+<a class="editlink" href="{% url "admin:DWStyles_dwlayout_change" layout.pk %}">Edit</a>
+{% endif %}
+
+</li>
+{% endfor %}
+</ul>
+
+<div class="pagination">
+<p>Layouts listed in alphabetical order.  Total layouts: {{ layouts.paginator.count }}</p>
+    <span class="step-links">
+        {% if layouts.has_previous %}
+            <a href="{% url "layout_list" page=layouts.previous_page_number %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ layouts.number }} of {{ layouts.paginator.num_pages }}.
+        </span>
+
+        {% if layouts.has_next %}
+            <a href="{% url "layout_list" page=layouts.next_page_number %}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

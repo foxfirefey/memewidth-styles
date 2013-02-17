@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+Theme: {{ theme.name }}, Layout: {{ theme.layout.name }} | Dreamwidth Styles
+{% endblock %}
+
+{% block extrahead %}
+{% endblock %}
+
+{% block page_title %}Theme: {{ theme.name }}{% endblock %}
+
+{% block content %}
+
+<div class="themebox">
+<h4 class="themebox-layout">Layout: <a href="{{theme.layout.get_absolute_url}}">{{theme.layout.name}}</a></h4>
+
+{{ theme.color_boxes|safe }}
+
+<div class="themebox-thumb">
+{% if theme.sysid %}
+<a class="themepreview" target="blank" title="Preview in a different window"
+href="http://www.dreamwidth.org/customize/preview_redirect?themeid={{ theme.sysid }}" >
+{% endif %}
+{% if theme.thumbnail %}
+<img src="{{ MEDIA_URL }}/{{ theme.thumbnail }}" width="{{theme.thumbnail_width}}" 
+height="{{theme.thumbnail_height}}" style="border: 1px solid black;" />
+{% else %}
+{% if theme.sysid %}
+Preview
+{% endif %}
+{% endif %}
+{% if theme.sysid %}
+</a>
+{% endif %}
+</div>
+</div>
+
+<div class="infobox layoutproperties">
+<h3>Layout Properties</h3>
+
+<ul>
+{% for property in theme.layout.properties.all %}
+<li>{{ property.label }}</li>
+{% endfor %}
+</ul>
+</div>
+
+{% if theme.properties.all %}
+<div class="infobox themeproperties">
+<h3>Theme Properties</h3>
+
+<ul>
+{% for property in theme.properties.all %}
+<li>{{ property.label }}</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+<div class="infobox themedetails">
+<h3>Details</h3>
+
+<ul>
+{% if theme.official %}
+<li>Official theme</li>
+{% endif %}
+{% if theme.labelid %}
+<li><a href="http://www.dreamwidth.org/customize/advanced/layerbrowse?id={{theme.labelid}}">Theme detail page</a></li>
+{% endif %}
+{% if theme.sysid %}
+<li><a href="http://www.dreamwidth.org/customize/advanced/layersource?id={{theme.sysid}}">Theme code</a></li>
+{% endif %}
+</ul>
+</div>
+
+{% endblock %}

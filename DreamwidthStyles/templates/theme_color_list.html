@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+Color List | Dreamwidth Styles
+{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+li.colorblock {
+  padding: 5px;
+  height: 100px;
+  width: 150px;
+  float: left;
+  margin: 5px;
+  padding: 3px;
+  list-style-type: none;
+}
+.colorblock span { display: block; margin-bottom: .2em;}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Colors</h1>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if colors.has_previous %}
+            <a href="{% url "theme_color_list" page=colors.previous_page_number %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ colors.number }} of {{ colors.paginator.num_pages }}.
+        </span>
+
+        {% if colors.has_next %}
+            <a href="{% url "theme_color_list" page=colors.next_page_number %}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+<ul>
+{% for color in colors.object_list %}
+<li class="colorblock" style="background-color: #{{color.color.color_hex}}; color: {{color.color.contrast_text}}; border: 1px solid black;">
+<span class="colorhex">#{{color.color.color_hex}}</span>
+{% if color.category %}<span class="colorcategory">{{color.category}}</span>{% endif %}
+{% if color.color.label %}<span class="colorlabel">{{color.color.label}}</span>{% endif %}
+
+<span class="more"><a style="color: {{color.color.contrast_text}};" href="{% url "color_view" hex_value=color.color.color_hex %}">More</a></span>
+</li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}

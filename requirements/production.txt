@@ -1,0 +1,6 @@
+Django==1.5c1
+MySQL-python==1.2.4
+argparse==1.2.1
+colormath==1.0.8
+numpy==1.7.0
+wsgiref==0.1.2

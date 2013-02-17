@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+Layout List | Dreamwidth Styles
+{% endblock %}
+
+{% block extrahead %}
+{% endblock %}
+
+{% block content %}
+<h1>Layouts</h1>
+
+<ul>
+{% for layout in layouts %}
+<li>
+{{ layout.name }} ({{layout.number_themes|default:"no"}} theme{{ layout.number_themes|pluralize }}) 
+<ul>
+{% if layout.example_theme %}<li>example theme: {{layout.example_theme.name}} <img style="border: 1px solid black;" src="{{ MEDIA_URL }}/{{layout.example_theme.thumbnail}}" /></li>{% endif %}
+</ul>
+</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

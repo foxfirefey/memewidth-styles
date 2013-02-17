@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+{{ object_name }} List | Dreamwidth Styles
+{% endblock %}
+
+{% block extrahead %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ object_name }}</h1>
+
+<div class="pagination top-pagination">
+    <div class="step-links">
+        <ul>
+        {% for p in page_range %}
+        {% if p == page %}
+            <li>{{ p }}</li>
+        {% else %}
+           <li><a href="{% url "list_url" page=p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<ul>
+{% for layout in layout_list %}
+<li>
+{{ layout.name }} ({{layout.number_themes|default:"no"}} theme{{ layout.number_themes|pluralize }}) 
+<ul>
+{% if layout.example_theme %}<li>example theme: {{layout.example_theme.name}} <img style="border: 1px solid black;" src="{{ MEDIA_URL }}/{{layout.example_theme.thumbnail}}" /></li>{% endif %}
+</ul>
+</li>
+{% endfor %}
+</ul>
+
+<div class="pagination bottom-pagination">
+    <div class="step-links">
+        <ul>
+        {% for p in page_range %}
+        {% if p == page %}
+            <li>{{ p }}</li>
+        {% else %}
+           <li><a href="{% url "list_url" page=p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+{{ title }}
+{% endblock %}
+
+{% block extrahead %}
+<style>
+.content table {
+    border-collapse: collapse;
+}
+.content table, .content table td, .content table th {
+    padding: 5px;
+    border: 1px solid #aaa;
+}
+
+.content table td.count { text-align: right; }
+.content table th.layout, .content table th.property { text-align: left; }
+.content .layout-themes, .content .theme-properties, .content .layout-properties { float: left; margin-right: 20px; margin-bottom: 20px;}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h2><p>Total layouts: {{ total_layouts }}.  Total themes: {{ total_themes }}.</p></h2>
+
+<div class="layout-themes">
+
+<h3>Themes per Layout</h3>
+
+<table>
+<thead>
+<tr><th>Layout</th><th># Themes</th></tr>
+</thead>
+<tbody>
+{% for layout in theme_counts %}
+
+<tr class="{% cycle "odd" "even" %}"><th class="layout">
+<a href="http://styles.memewidth.org/layout/{{layout.layout}}">{{ layout.layout__name }}</a></th>
+<td class="count">{{ layout.themes }}</td></tr>
+
+{% endfor %}
+<tr class="{% cycle "odd" "even" %}"><th class="layout total">Total</th>
+<td class="count">{{ total_themes }}</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="layout-properties">
+<h3>Layout Properties</h3>
+
+<table>
+<thead>
+<tr><th>Property</th><th># Layouts</th></tr>
+</thead>
+<tbody>
+{% for pinfo in property_counts %}
+{% if pinfo.property.layout_use %}
+<tr class="{% cycle "odd" "even" %}"><th class="property"><a href="http://styles.memewidth.org/layouts/?filter={{pinfo.property.codename}}">{{ pinfo.property }}</a></th>
+<td class="count">{{ pinfo.layout_count }}</td></tr>
+{% endif %}
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<div class="theme-properties">
+<h3>Theme Properties</h3>
+
+<table>
+<thead>
+<tr><th>Property</th><th># Themes</th></tr>
+</thead>
+<tbody>
+{% for pinfo in property_counts %}
+<tr class="{% cycle "odd" "even" %}"><th class="property"><a href="{% if pinfo.property.theme_use %}http://styles.memewidth.org/themes/?themefilter={{pinfo.property.codename}}{% else %}http://styles.memewidth.org/themes/?layoutfilter={{pinfo.property.codename}}{%endif%}">{{ pinfo.property}}</a></th>
+<td class="count">{{ pinfo.theme_count }}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}
+

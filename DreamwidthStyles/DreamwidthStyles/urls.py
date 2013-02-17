@@ -6,7 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from DWStyles.models import *
-from DWStyles.views import ThemeDetailView, LayoutDetailView
+from DWStyles.views import ThemeDetailView, LayoutDetailView, ColorPropertyDetailView
 
 urlpatterns = patterns('',
     # Example:
@@ -22,23 +22,17 @@ urlpatterns = patterns('',
 
     url(r'^$', 'DWStyles.views.home', name="home"),
     url(r'^stats/?', 'DWStyles.views.stats', name="stats"),
-    #(r'^$', 'django.views.generic.simple.direct_to_template', {'template': "base.html"}),
 
     # list all the layouts
     url(r'^layouts/(?P<page>[0-9]+)?$', "DWStyles.views.layout_list", name="layout_list"),
     url(r'^themes/(?P<page>[0-9]+)?$', "DWStyles.views.theme_list", name="theme_list"),
     url(r'^colors/(?P<page>[0-9]+)?$', "DWStyles.views.color_list", name="color_list"),
-    url(r'^color/(?P<hex_value>[a-fA-F0-9]+)$', 'DWStyles.views.color_view', name='color_view'),
+    url(r'^color/(?P<slug>[a-fA-F0-9]+)$', ColorPropertyDetailView.as_view(), name='color_view'),
     
     url(r'^colorgroups/?$', "DWStyles.views.colorgroup_list", name="colorgroup_list"),
     url(r'^colorgroup/(?P<codename>[a-zA-Z0-9_s]+)/(?P<page>[0-9]+)?$', 
         "DWStyles.views.colorgroup_colorlist", name="colorgroup_colorlist"),
     
-    #(r'^layout/(?P<object_id>[0-9]+)$', object_detail, 
-    #    {'template_name': 'view_layout.html', 
-    #    'template_object_name': 'layout',
-    #    'queryset': DWLayout.objects.all(),
-    #    }, "layout_view" ),
     url(r'^layout/(?P<pk>\d+)$', LayoutDetailView.as_view(), name="layout_view"),
     url(r'^theme/(?P<pk>\d+)$', ThemeDetailView.as_view(), name="theme_view"),
 )

@@ -7,6 +7,7 @@ from django.db.models import Count
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response
@@ -238,7 +239,6 @@ def color_list(request, page=1):
     return render_to_response('color_list.html', c, 
         context_instance=RequestContext(request))
    
-def color_view(request, hex_value):
      
     hex_value = hex_value.lower()
 
@@ -255,6 +255,52 @@ def color_view(request, hex_value):
      
     return render_to_response('view_color.html', c, 
         context_instance=RequestContext(request))
+
+class ColorPropertyDetailView(DetailView):
+
+    slug_field = "color_hex"
+    context_object_name = "color"
+    queryset = ColorProperty.objects.all()
+
+    def get_object(self, queryset = None):
+        """Overriding the default function; if a color property does not exist, it means that
+           it should be created and the values refreshed.  All hex colors exist, they just
+           might not be in the database yet."""
+
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+        # Next, try looking up by slug.
+        elif slug is not None:
+            #CHANGED -- we are expecting a hex color; normalize to all lowercase
+            slug = slug.lower()
+            slug_field = self.get_slug_field()
+            queryset = queryset.filter(**{slug_field: slug})
+
+        # If none of those are defined, it's an error.
+        else:
+            raise AttributeError("Generic detail view %s must be called with "
+                                 "either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            # CHANGED -- if it doesn't exist, create it
+            obj = ColorProperty(**{slug_field: slug})
+            obj.save() # saving runs the refresh_values bit
+
+        return obj
 
 def colorgroup_list(request):
     

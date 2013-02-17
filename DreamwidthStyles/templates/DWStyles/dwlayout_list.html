@@ -83,7 +83,7 @@ Layout List
 
 <div class="pagination top">
 <p>Layouts listed in alphabetical order.  Total layouts: {{ paginator.count }}</p>
-{% with "layout_list" as base_url %}
+{% with "dwstyles:layout_list" as base_url %}
 {% include "utility/step_links.html" %}
 {% endwith %}
 </div>
@@ -127,7 +127,7 @@ Preview
 </ul>
 
 <div class="pagination">
-{% with "layout_list" as base_url %}
+{% with "dwstyles:layout_list" as base_url %}
 {% include "utility/step_links.html" %}
 {% endwith %}
 </div>

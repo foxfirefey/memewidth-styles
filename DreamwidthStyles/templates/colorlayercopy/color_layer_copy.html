@@ -17,7 +17,7 @@ textarea#id_paste { width: 100%; }
 
 {% block content %}
 
-<form action="{% url "color_layer_copy" %}" method="post">
+<form action="{% url "dwstyles:color_layer_copy" %}" method="post">
 
 {% csrf_token %}
 {{ pasteform.as_p }}

@@ -25,7 +25,7 @@ li.colorblock {
 <div class="pagination">
     <span class="step-links">
         {% if colors.has_previous %}
-            <a href="{% url "theme_color_list" page=colors.previous_page_number %}">previous</a>
+            <a href="{% url "dwstyles:theme_color_list" page=colors.previous_page_number %}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -33,7 +33,7 @@ li.colorblock {
         </span>
 
         {% if colors.has_next %}
-            <a href="{% url "theme_color_list" page=colors.next_page_number %}">next</a>
+            <a href="{% url "dwstyles:theme_color_list" page=colors.next_page_number %}">next</a>
         {% endif %}
     </span>
 </div>
@@ -45,7 +45,7 @@ li.colorblock {
 {% if color.category %}<span class="colorcategory">{{color.category}}</span>{% endif %}
 {% if color.color.label %}<span class="colorlabel">{{color.color.label}}</span>{% endif %}
 
-<span class="more"><a style="color: {{color.color.contrast_text}};" href="{% url "color_view" hex_value=color.color.color_hex %}">More</a></span>
+<span class="more"><a style="color: {{color.color.contrast_text}};" href="{% url "dwstyles:color_view" hex_value=color.color.color_hex %}">More</a></span>
 </li>
 {% endfor %}
 </ul>

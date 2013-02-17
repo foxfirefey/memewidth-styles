@@ -42,7 +42,7 @@ class DWLayout(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('layout_view', [], {'pk': self.pk})
+        return ('dwstyles:layout_view', [], {'pk': self.pk})
     
     @staticmethod
     def get_layout_choices():
@@ -193,7 +193,7 @@ class DWTheme(models.Model):
         
     @models.permalink
     def get_absolute_url(self):
-        return ('theme_view', [], {'pk': self.pk})
+        return ('dwstyles:theme_view', [], {'pk': self.pk})
     
     class Meta:
         verbose_name = "DW theme"
@@ -322,13 +322,9 @@ class ColorPropertyGroup(models.Model):
         
         return [(group.codename, group.label) for group in groups]
 
- #   def get_themes():
-  
- 
     @models.permalink
     def get_absolute_url(self):
-        return ('colorgroup_colorlist', [], {'codename': self.codename})
-    
+        return ('dwstyles:colorgroup_colorlist', [], {'codename': self.codename})
     
     class Meta:
         ordering = ["label"]
@@ -397,7 +393,7 @@ class ColorProperty(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('color_view', (), {'hex_value': self.hex_color})
+        return ('dwstyles:color_view', (), {'hex_value': self.hex_color})
         
     def save(self):
         """This save function exists to update all of the many different automatically
@@ -550,7 +546,7 @@ class ColorProperty(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('view_color', (), {'hex_value': self.color_hex})
+        return ('dwstyles:view_color', (), {'hex_value': self.color_hex})
     
     class Meta:
         ordering = ["color_hex"]

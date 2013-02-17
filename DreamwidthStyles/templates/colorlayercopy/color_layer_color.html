@@ -35,7 +35,7 @@ textarea#id_paste { width: 100%; }
 
 <h1>{{ layer.theme.name }} ("{{ layer.redist_unique}}")</h1>
 
-<form action="{% url "color_layer_copy" %}" method="post">
+<form action="{% url "dwstyles:color_layer_copy" %}" method="post">
 
 {% csrf_token %}
 {{ pasteform }}

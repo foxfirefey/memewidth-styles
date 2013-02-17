@@ -1,12 +1,12 @@
 <div class="colorbar" style="border: 1px solid {{border_color}}; width: {{colorbar_width}}em;">
 {% for color in feature_colors %}
 <div class="colorbox" style="float: left; width: {{feature_width}}em; height: 2em; background-color: #{{color.color.color_hex}};">
-<a style="display: block; width: {{feature_width}}em; height: 2em;" href="{% url "color_view" hex_value=color.color.rounded_hex %}" title="#{{color.color.color_hex}}"></a>
+<a style="display: block; width: {{feature_width}}em; height: 2em;" href="{% url "dwstyles:color_view" hex_value=color.color.rounded_hex %}" title="#{{color.color.color_hex}}"></a>
 </div>
 {% endfor %}
 {% for color in accent_colors %}
 <div class="colorbox" style="float: left; width:{{accent_width}}em; height: 2em; background-color: #{{color.color.color_hex}};">
-<a style="display: block; width: {{accent_width}}em; height: 2em;" href="{% url "color_view" hex_value=color.color.rounded_hex %}" title="#{{color.color.color_hex}}"></a>
+<a style="display: block; width: {{accent_width}}em; height: 2em;" href="{% url "dwstyles:color_view" hex_value=color.color.rounded_hex %}" title="#{{color.color.color_hex}}"></a>
 </div>
 {% endfor %}
 <div style="clear: both"></div></div>

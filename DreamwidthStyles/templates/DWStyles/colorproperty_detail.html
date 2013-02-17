@@ -90,7 +90,7 @@ Color: #{{ color.color_hex }}
 <div class="colorblocks" style="width: 200px;">
 {% endif %}
 <div style="display: block; float: left; background-color: #{{near.color_hex}}; border: 1px solid black; width: 20px; height: 20px;">
-<a style="display: block; width: 20px; height: 20px;" href="{% url "color_view" hex_value=near.color_hex %}" title="#{{near.color_hex}}"></a>
+<a style="display: block; width: 20px; height: 20px;" href="{% url "dwstyles:color_view" hex_value=near.color_hex %}" title="#{{near.color_hex}}"></a>
 </div>
 {% if forloop.last %}
 </div>

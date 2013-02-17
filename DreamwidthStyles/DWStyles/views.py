@@ -116,6 +116,11 @@ def layout_view(request, object_id):
     return render_to_response('view_layout.html', c, 
         context_instance=RequestContext(request))
 
+class LayoutDetailView(DetailView):
+
+    context_object_name = "layout"
+    queryset = DWLayout.objects.all()
+
 def theme_list(request, page=1):
     
     if not page:
@@ -453,7 +458,7 @@ def process_themecolor_pasteform(request, context, layer = None):
     
     return True
 
-class ThemeDetail(DetailView):
+class ThemeDetailView(DetailView):
 
     context_object_name = "theme"
     queryset = DWTheme.objects.all()

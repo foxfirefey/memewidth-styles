@@ -6,7 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from DWStyles.models import *
-from DWStyles.views import ThemeDetail
+from DWStyles.views import ThemeDetailView, LayoutDetailView
 
 urlpatterns = patterns('',
     # Example:
@@ -39,12 +39,6 @@ urlpatterns = patterns('',
     #    'template_object_name': 'layout',
     #    'queryset': DWLayout.objects.all(),
     #    }, "layout_view" ),
-    url(r'^layout/(?P<object_id>[0-9]+)$', "DWStyles.views.layout_view", name="layout_view"),
-    #(r'^theme/(?P<object_id>[0-9]+)$', object_detail, 
-    #    {'template_name': 'view_theme.html', 
-    #    'template_object_name': 'theme',
-    #    'queryset': DWTheme.objects.all(),
-    #    }, "theme_view" )
-    # url(r'^theme/(?P<object_id>[0-9]+)$', 'DWStyles.views.theme_view', name="theme_view")
-    url(r'^theme/(?P<pk>\d+)$', ThemeDetail.as_view(), name="theme_view"),
+    url(r'^layout/(?P<pk>\d+)$', LayoutDetailView.as_view(), name="layout_view"),
+    url(r'^theme/(?P<pk>\d+)$', ThemeDetailView.as_view(), name="theme_view"),
 )

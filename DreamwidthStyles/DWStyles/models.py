@@ -42,7 +42,7 @@ class DWLayout(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('layout_view', [], {'object_id': self.pk})
+        return ('layout_view', [], {'pk': self.pk})
     
     @staticmethod
     def get_layout_choices():

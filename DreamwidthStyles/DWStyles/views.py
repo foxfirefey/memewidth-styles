@@ -104,63 +104,29 @@ class DWLayoutListView(ListView):
 
         return c
 
-def layout_list(request, page=1):
-
-    if not page:
-        page = 1
-
-    filters = []
-    
-    if "filter" in request.GET:
-        filternames = request.GET.getlist("filter")
-        for filtername in filternames:
-            try:
-                filters.append(StyleProperty.objects.get(codename = filtername))
-            except:
-                pass
-            
-    
-    layout_list = DWLayout.objects.all()
-    
-    filterform = LayoutPropertyFilterForm(initial = {
-        "filter": [filter.codename for filter in filters] })
-    
-    for filter in filters:
-        layout_list = layout_list.filter(properties__pk = filter.pk)
-    
-    paginator = Paginator(layout_list, 25) # Show 25 layouts per page
-
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        layouts = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        layouts = paginator.page(paginator.num_pages)
-
-    c = { "layouts": layouts, 
-        "title": "Layouts",
-        "filterform": filterform,
-        "editlinks": request.user.is_staff,
-        }
-    
-    return render_to_response('layout_list.html', c, 
-        context_instance=RequestContext(request))
-
-def layout_view(request, object_id):
-    
-    layout = DWLayout.objects.get(id = object_id)
-    
-    c = {
-        "layout": layout,
-        "editlinks": request.user.is_staff,
-    }
-    
-    return render_to_response('view_layout.html', c, 
-        context_instance=RequestContext(request))
-
-class LayoutDetailView(DetailView):
+class DWLayoutDetailView(DetailView):
 
     context_object_name = "layout"
     queryset = DWLayout.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(DWLayoutDetailView, self).get_context_data(**kwargs)
+
+        context["editlinks"] = self.request.user.is_staff
+
+        return context
+
+class DWThemeDetailView(DetailView):
+
+    context_object_name = "theme"
+    queryset = DWTheme.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(DWThemeDetailView, self).get_context_data(**kwargs)
+
+        context["editlinks"] = self.request.user.is_staff
+
+        return context
 
 def theme_list(request, page=1):
     
@@ -543,8 +509,3 @@ def process_themecolor_pasteform(request, context, layer = None):
     context["layer"] = layer
     
     return True
-
-class ThemeDetailView(DetailView):
-
-    context_object_name = "theme"
-    queryset = DWTheme.objects.all()

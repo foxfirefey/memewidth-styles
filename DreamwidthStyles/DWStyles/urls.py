@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 
 from .views import ColorPropertyDetailView
-from .views import LayoutDetailView
-from .views import ThemeDetailView
+from .views import DWLayoutDetailView
+from .views import DWThemeDetailView
 from .views import DWLayoutListView
 from .views import StatsView
 from .views import HomeView
@@ -32,6 +32,6 @@ urlpatterns += patterns('',
     
     # detail views
     url(r'^color/(?P<slug>[a-fA-F0-9]+)$', ColorPropertyDetailView.as_view(), name='color_view'),
-    url(r'^layout/(?P<pk>\d+)$', LayoutDetailView.as_view(), name="layout_view"),
-    url(r'^theme/(?P<pk>\d+)$', ThemeDetailView.as_view(), name="theme_view"),
+    url(r'^layout/(?P<pk>\d+)$', DWLayoutDetailView.as_view(), name="layout_view"),
+    url(r'^theme/(?P<pk>\d+)$', DWThemeDetailView.as_view(), name="theme_view"),
 )

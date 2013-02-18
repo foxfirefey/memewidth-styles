@@ -402,7 +402,6 @@ class ColorProperty(models.Model):
         else:
             self.in_themes = False
         
-        # save!
         super(ColorProperty, self).save()
     
     def refresh_values(self):
@@ -606,8 +605,7 @@ class ColorDistance(models.Model):
         calculated values of a given color."""
         
         self.distance = color_distance(self.color_a, self.color_b)
-        
-        # save!
+
         super(ColorDistance, self).save()
     
     class Meta:
@@ -642,8 +640,7 @@ def create_rounded_distances():
             # first color is always lexographically before the second
             if color_a.color_hex > color_b.color_hex:
                 continue
-            new_distance, created = ColorDistance.objects.get_or_create(color_a = color_a, color_b = color_b )
-            #ColorDistance(color_a = color_a, color_b = color_b, distance = distance)
+            new_distance, created = ColorDistance.objects.get_or_create(color_a = color_a, color_b = color_b)
             if created:
                 distance = color_distance(color_a, color_b)
                 new_distance.distance = distance

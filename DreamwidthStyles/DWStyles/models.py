@@ -390,10 +390,6 @@ class ColorProperty(models.Model):
         """Calculates the distance to another color, but using the rounded values."""
         
         return color_distance(self, color)
-    
-    @models.permalink
-    def get_absolute_url(self):
-        return ('dwstyles:color_view', (), {'hex_value': self.hex_color})
         
     def save(self):
         """This save function exists to update all of the many different automatically
@@ -546,7 +542,7 @@ class ColorProperty(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('dwstyles:view_color', (), {'hex_value': self.color_hex})
+        return ('dwstyles:color_view', (), {'slug': self.color_hex})
     
     class Meta:
         ordering = ["color_hex"]

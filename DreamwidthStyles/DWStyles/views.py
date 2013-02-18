@@ -229,23 +229,17 @@ def color_list(request, page=1):
     
     return render_to_response('color_list.html', c, 
         context_instance=RequestContext(request))
-   
-    hex_value = hex_value.lower()
 
-    try:
-        color = ColorProperty.objects.get(color_hex = hex_value)
-    except:
-        color = ColorProperty(color_hex = hex_value)
-        color.refresh_values()
-         
-    c = {
-        "color": color,
-        "title": "Color: #%s" % color.color_hex,
-    }
-     
-    return render_to_response('view_color.html', c, 
-        context_instance=RequestContext(request))
+class ColorPropertyListView(ListView):
 
+    model = ColorProperty
+    paginate_by = 200
+    context_object_name = "colorproperty_list"
+
+    def get_queryset(self):
+
+        return ColorProperty.get_colors_in_themes()
+        
 class ColorPropertyDetailView(DetailView):
 
     slug_field = "color_hex"

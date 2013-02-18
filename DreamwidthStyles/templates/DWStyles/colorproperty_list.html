@@ -4,6 +4,10 @@
 Color List | Dreamwidth Styles
 {% endblock %}
 
+{% block page_title %}
+Color List
+{% endblock %}
+
 {% block extrahead %}
 <style type="text/css">
 li.colorblock {
@@ -28,23 +32,13 @@ li.colorblock {
 </div>
 
 <div class="pagination">
-    <span class="step-links">
-        {% if colors.has_previous %}
-            <a href="{% url "dwstyles:color_list" page=colors.previous_page_number %}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ colors.number }} of {{ colors.paginator.num_pages }}.
-        </span>
-
-        {% if colors.has_next %}
-            <a href="{% url "dwstyles:color_list" page=colors.next_page_number %}">next</a>
-        {% endif %}
-    </span>
+{% with "dwstyles:color_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
 </div>
 
 <ul>
-{% for color in colors.object_list %}
+{% for color in colorproperty_list %}
 <li class="colorblock" style="background-color: #{{color.color_hex}}; color: {{color.contrast_text}}; border: 1px solid black;">
 <span class="colorhex">#{{color.color_hex}}</span>
 <span class="more"><a style="color: {{color.contrast_text}};" href="{% url "dwstyles:color_view" slug=color.color_hex %}">More</a></span>
@@ -54,18 +48,8 @@ li.colorblock {
 
 
 <div class="pagination">
-    <span class="step-links">
-        {% if colors.has_previous %}
-            <a href="{% url "dwstyles:color_list" page=colors.previous_page_number %}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ colors.number }} of {{ colors.paginator.num_pages }}.
-        </span>
-
-        {% if colors.has_next %}
-            <a href="{% url "dwstyles:color_list" page=colors.next_page_number %}">next</a>
-        {% endif %}
-    </span>
+{% with "dwstyles:color_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
 </div>
 {% endblock %}

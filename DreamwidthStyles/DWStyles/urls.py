@@ -5,11 +5,10 @@ from .views import LayoutDetailView
 from .views import ThemeDetailView
 from .views import DWLayoutListView
 from .views import StatsView
+from .views import HomeView
 
 urlpatterns = patterns('DWStyles.views',
     url(r'^admin/color_layer_copy$', "color_layer_copy", name="color_layer_copy"),
-
-    url(r'^$', 'home', name="home"),
 
     # list views
     url(r'^themes/(?P<page>[0-9]+)?$', "theme_list", name="theme_list"),
@@ -25,6 +24,7 @@ urlpatterns = patterns('DWStyles.views',
 # Class based generic views
 urlpatterns += patterns('',
     # template views
+    url(r'^$', HomeView.as_view(), name="home"),
     url(r'^stats/?$', StatsView.as_view(), name="stats"),
 
     # list views

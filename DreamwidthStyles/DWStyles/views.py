@@ -26,9 +26,9 @@ def add_message(context, message):
     
     context["messages"].append(message)
 
-def home(request):
-    return render_to_response('home.html', {'title': "Home"},
-        context_instance=RequestContext(request))
+class HomeView(TemplateView):
+
+    template_name = "home.html"
 
 class StatsView(TemplateView):
 

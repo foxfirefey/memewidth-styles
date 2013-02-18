@@ -74,6 +74,10 @@ class S2LayerParse(object):
             self.theme = DWTheme.objects.get(labelid=self.redist_unique)
         except ObjectDoesNotExist:
             self.theme = None
+        except MultipleObjectsReturned:
+            self.theme = None
+
+        if self.theme = None
             return
         
         self.existing_themecolors = {}

@@ -47,7 +47,7 @@ usable!</p>
 {{ colorgroup.label }}
 <a class="colorblock" style="background-color: #{{colorgroup.display_color}};" href="{{colorgroup.get_absolute_url}}"></a>
 {{ colorgroup.description }}
-<p><a href="{% url "theme_list" %}?colorfilter={{colorgroup.codename}}">View themes</a></p>
+<p><a href="{% url "dwstyles:theme_list" %}?colorfilter={{colorgroup.codename}}">View themes</a></p>
 </li>
 {% endfor %}
 </ul>
@@ -62,7 +62,7 @@ usable!</p>
 {{ colorgroup.label }}
 <a class="colorblock" style="background-color: #{{colorgroup.display_color}};" href="{{colorgroup.get_absolute_url}}"></a>
 {{ colorgroup.description }}
-<p><a href="{% url "theme_list" %}?colorfilter={{colorgroup.codename}}">View themes</a></p>
+<p><a href="{% url "dwstyles:theme_list" %}?colorfilter={{colorgroup.codename}}">View themes</a></p>
 </li>
 {% endfor %}
 </ul>

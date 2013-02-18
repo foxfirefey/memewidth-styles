@@ -230,7 +230,6 @@ def color_list(request, page=1):
     return render_to_response('color_list.html', c, 
         context_instance=RequestContext(request))
    
-     
     hex_value = hex_value.lower()
 
     try:
@@ -307,31 +306,31 @@ class ColorGroupListView(TemplateView):
         
         return context
 
-def colorgroup_colorlist(request, codename, page=1):
-    
-    colorgroup = ColorPropertyGroup.objects.get(codename = codename)
-    
-    if not page:
-        page = 1
-    
-    color_list = ColorProperty.objects.filter(groups__id=colorgroup.pk)
-    paginator = Paginator(color_list, 200) # Show 50 colors per page
+class ColorGroupColorListView(ListView):
+    model = ColorProperty
+    context_object_name = "color_list"
+    paginate_by = 200
+    template_name = "DWStyles/colorgroup_colorlist.html"
 
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        colors = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        colors = paginator.page(paginator.num_pages)
-    
-    c = {
-        "colorgroup": colorgroup,
-        "colors": colors,
-        "title": "Colors: %s" % colorgroup.label
-    }
-    
-    return render_to_response('colorgroup_colorlist.html', c,
-        context_instance=RequestContext(request))
+    def get_queryset(self):
+        
+        try:
+            slug = self.kwargs.get("slug", None)
+            self.colorgroup = ColorPropertyGroup.objects.get(codename = slug)
+        except ObjectDoesNotExist:
+            return None
+        
+        return ColorProperty.objects.filter(groups__id = self.colorgroup.pk)
+        
+    def get_context_data(self, **kwargs):
+        c = super(ColorGroupColorListView, self).get_context_data(**kwargs)
 
+        c.update({
+            "colorgroup": self.colorgroup,
+        })
+
+        return c
+        
 #########################################
 # color_layer_copy processing functions #
 #########################################

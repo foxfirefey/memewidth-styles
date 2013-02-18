@@ -7,6 +7,7 @@ from .views import DWThemeDetailView
 from .views import DWLayoutListView
 from .views import DWThemeListView
 from .views import ColorGroupListView
+from .views import ColorGroupColorListView
 
 from .views import StatsView
 from .views import HomeView
@@ -16,10 +17,6 @@ urlpatterns = patterns('DWStyles.views',
 
     # list views
     url(r'^colors/(?P<page>[0-9]+)?$', "color_list", name="color_list"),
-
-    # detail views
-    url(r'^colorgroup/(?P<codename>[a-zA-Z0-9_s]+)/(?P<page>[0-9]+)?$', 
-        "colorgroup_colorlist", name="colorgroup_colorlist"),
 )
 
 # Class based generic views
@@ -37,4 +34,7 @@ urlpatterns += patterns('',
     url(r'^color/(?P<slug>[a-fA-F0-9]+)$', ColorPropertyDetailView.as_view(), name='color_view'),
     url(r'^layout/(?P<pk>\d+)$', DWLayoutDetailView.as_view(), name="layout_view"),
     url(r'^theme/(?P<pk>\d+)$', DWThemeDetailView.as_view(), name="theme_view"),
+    url(r'^colorgroup/(?P<slug>[a-zA-Z0-9_s]+)$', 
+        ColorGroupColorListView.as_view(), name="colorgroup_colorlist"),
+
 )

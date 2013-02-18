@@ -42,8 +42,11 @@ Layout: {{ layout.name }} | Dreamwidth Styles
 <div class="clear"></div>
 
 <h3>Themes ({{layout.get_themes.count}})</h3>
-{% with layout.get_themes as themes %}
-{% include "list_templates/themes.html" %}
-{% endwith %}
+<ul class="themelist">
+{% for theme in layout.get_themes %}
+{% include "list_templates/themebox.html" %}
+{% endfor %}
+</ul>
+<div class="clear"></div>
 
 {% endblock %}

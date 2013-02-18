@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block browser_title %}
+Colors: {{ colorgroup.label }} | Dreamwidth Style Browser
+{% endblock %}
+
+{% block page_title %}
+Colors: {{ colorgroup.label }}
+{% endblock %}
+
+{% block extrahead %}
+<style type="text/css">
+li.colorblock {
+  padding: 5px;
+  height: 2.5em;
+  width: 5em;
+  float: left;
+  margin: 5px;
+  padding: 3px;
+  list-style-type: none;
+  text-align: center;
+  font-family: monospace;
+}
+.colorblock span { display: block; margin-bottom: .2em;}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<p>You can also <a href="{% url "dwstyles:theme_list" %}?colorfilter={{colorgroup.codename}}">view themes with feature colors in this group</a>.</p>
+
+<div class="pagination">
+{% with "dwstyles:color_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
+</div>
+
+<ul>
+{% for color in color_list %}
+<li class="colorblock" style="background-color: #{{color.color_hex}}; color: {{color.contrast_text}}; border: 1px solid black;">
+<span class="colorhex">#{{color.color_hex}}</span>
+<span class="more"><a style="color: {{color.contrast_text}};" href="{% url "dwstyles:color_view" slug=color.color_hex %}">More</a></span>
+</li>
+{% endfor %}
+</ul>
+
+<div class="pagination">
+{% with "dwstyles:color_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
+</div>
+
+{% endblock %}

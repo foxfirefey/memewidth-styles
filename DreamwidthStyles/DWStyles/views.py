@@ -210,25 +210,6 @@ class DWThemeListView(ListView):
         })
 
         return context
-        
-def color_list(request, page=1):
-    
-    if not page:
-        page = 1
-    
-    color_list = ColorProperty.get_colors_in_themes()
-    paginator = Paginator(color_list, 200) # Show 50 colors per page
-
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        colors = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        colors = paginator.page(paginator.num_pages)
-
-    c = { "colors": colors, "title": "Colors" }
-    
-    return render_to_response('color_list.html', c, 
-        context_instance=RequestContext(request))
 
 class ColorPropertyListView(ListView):
 

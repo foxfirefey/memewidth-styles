@@ -331,7 +331,11 @@ def colorgroup_colorlist(request, codename, page=1):
     
     return render_to_response('colorgroup_colorlist.html', c,
         context_instance=RequestContext(request))
-        
+
+#########################################
+# color_layer_copy processing functions #
+#########################################
+
 @login_required
 def color_layer_copy(request):
     """This view handles processing an S2 layer, most likely a theme, copied from the site.

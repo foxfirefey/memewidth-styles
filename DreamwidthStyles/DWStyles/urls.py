@@ -11,7 +11,6 @@ from .views import ColorGroupListView
 from .views import StatsView
 from .views import HomeView
 
-
 urlpatterns = patterns('DWStyles.views',
     url(r'^admin/color_layer_copy$', "color_layer_copy", name="color_layer_copy"),
 

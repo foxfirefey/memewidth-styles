@@ -128,104 +128,99 @@ class DWThemeDetailView(DetailView):
 
         return context
 
-def theme_list(request, page=1):
-    
-    if not page:
-        page = 1
-    
-    theme_list = DWTheme.objects.order_by('-date_added')
-    
-    layoutfilters = []
-    layoutselects = []
-    colorfilters = []
-    themefilters = []
-    filters = []
+class DWThemeListView(ListView):
 
-    if "layoutfilter" in request.GET:
-        filternames = request.GET.getlist("layoutfilter")
-        for filtername in filternames:
-            try:
-                layoutfilters.append(StyleProperty.objects.get(codename = filtername, 
-                    layout_use = True))
-            except:
-                pass
-        filters.append("Layout property filters: " + ", ".join(
-            [p.label for p in layoutfilters]))
-        
-        
-    if "layoutselect" in request.GET:
-        layouts = request.GET.getlist("layoutselect")
-        for layout in layouts:
-            try:
-                layoutselects.append(DWLayout.objects.get(sysid = layout))
-            except:
-                pass
-        filters.append("Layouts included in search: " + ", ".join(
-            [l.name for l in layoutselects]))
+    model = DWTheme
+    context_object_name = "theme_list"
+    paginate_by = 25
+
+    def get_queryset(self):
+        theme_list = DWTheme.objects.order_by('-date_added')
+
+        self.layoutfilters = []
+        self.layoutselects = []
+        self.colorfilters = []
+        self.themefilters = []
+        self.filters = []
+
+        if "layoutfilter" in self.request.GET:
+            filternames = self.request.GET.getlist("layoutfilter")
+            for filtername in filternames:
+                try:
+                    self.layoutfilters.append(StyleProperty.objects.get(codename = filtername, 
+                        layout_use = True))
+                except:
+                    pass
+            self.filters.append("Layout property filters: " + ", ".join(
+                [p.label for p in self.layoutfilters]))
             
-    if "colorfilter" in request.GET:
-        filternames = request.GET.getlist("colorfilter")
-        for filtername in filternames:
-            try:
-                colorfilters.append(ColorPropertyGroup.objects.get(codename = filtername))
-            except:
-                pass
-        filters.append("Color group filters: " + ", ".join(
-            [c.label for c in colorfilters]))
-        
-    if "themefilter" in request.GET:
-        filternames = request.GET.getlist("themefilter")
-        for filtername in filternames:
-            try:
-                themefilters.append(StyleProperty.objects.get(codename = filtername, 
-                    theme_use = True))
-            except:
-                pass
-        filters.append("Theme property filters: " + ", ".join(
-            [p.label for p in themefilters]))
-        
+        if "layoutselect" in self.request.GET:
+            layouts = self.request.GET.getlist("layoutselect")
+            for layout in layouts:
+                try:
+                    self.layoutselects.append(DWLayout.objects.get(sysid = layout))
+                except:
+                    pass
+            self.filters.append("Layouts included in search: " + ", ".join(
+                [l.name for l in self.layoutselects]))
+                
+        if "colorfilter" in self.request.GET:
+            filternames = self.request.GET.getlist("colorfilter")
+            for filtername in filternames:
+                try:
+                    self.colorfilters.append(ColorPropertyGroup.objects.get(codename = filtername))
+                except:
+                    pass
+            self.filters.append("Color group filters: " + ", ".join(
+                [c.label for c in self.colorfilters]))
+            
+        if "themefilter" in self.request.GET:
+            filternames = self.request.GET.getlist("themefilter")
+            for filtername in filternames:
+                try:
+                    self.themefilters.append(StyleProperty.objects.get(codename = filtername, 
+                        theme_use = True))
+                except:
+                    pass
+            self.filters.append("Theme property filters: " + ", ".join(
+                [p.label for p in self.themefilters]))
 
-    filterform = ThemePropertyFilterForm(initial = {
-        "layoutfilter": [filter.codename for filter in layoutfilters],
-        "layoutselects": [layout.sysid for layout in layoutselects],
-        "colorfilter": [filter.codename for filter in colorfilters],
-        "themefilter": [filter.codename for filter in themefilters],
-    })
-    
-    for filter in themefilters:
-        theme_list = theme_list.filter(properties__pk = filter.pk)
-    
-    for filter in layoutfilters:
-        theme_list = theme_list.filter(layout__properties__pk = filter.pk)
-    
-    for filter in colorfilters:
-        theme_list = theme_list.filter(colors__groups__pk = filter.pk, dwthemecolor__category = "feature")
-    
-    if len(layoutselects):
-        theme_list = theme_list.filter( layout__in = layoutselects )
-    
-    # want to make sure only distinct themes are chosen
-    theme_list = theme_list.distinct()
-    
-    paginator = Paginator(theme_list, 25)
-    
-    # If page request (9999) is out of range, deliver last page of results.
-    try:
-        themes = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        themes = paginator.page(paginator.num_pages)
-    
-    c = { "themes": themes, 
-        "title": "Themes",
-        "filterform": filterform,
-        "query": request.GET.copy(),
-        "editlinks": request.user.is_staff,
-        "filters": filters,
-    }
-    
-    return render_to_response('theme_list.html', c, 
-        context_instance=RequestContext(request))
+        for filter in self.themefilters:
+            theme_list = theme_list.filter(properties__pk = filter.pk)
+        
+        for filter in self.layoutfilters:
+            theme_list = theme_list.filter(layout__properties__pk = filter.pk)
+        
+        for filter in self.colorfilters:
+            theme_list = theme_list.filter(colors__groups__pk = filter.pk, dwthemecolor__category = "feature")
+        
+        if len(self.layoutselects):
+            theme_list = theme_list.filter( layout__in = self.layoutselects )
+        
+        # want to make sure only distinct themes are chosen
+        theme_list = theme_list.distinct()
+        
+        return theme_list
 
+    def get_context_data(self, **kwargs):
+        context = super(DWThemeListView, self).get_context_data(**kwargs)
+
+        filterform = ThemePropertyFilterForm(initial = {
+            "layoutfilter": [filter.codename for filter in self.layoutfilters],
+            "layoutselects": [layout.sysid for layout in self.layoutselects],
+            "colorfilter": [filter.codename for filter in self.colorfilters],
+            "themefilter": [filter.codename for filter in self.themefilters],
+        })
+
+        context.update({
+            "filterform": filterform,
+            "applied_filters": self.filters,
+            "editlinks": self.request.user.is_staff,
+            "query": self.request.GET.copy(),
+        })
+
+        return context
+        
 def color_list(request, page=1):
     
     if not page:

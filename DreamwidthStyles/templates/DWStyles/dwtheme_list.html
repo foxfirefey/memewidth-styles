@@ -4,6 +4,10 @@
 Theme List | Dreamwidth Styles
 {% endblock %}
 
+{% block page_title %}
+Themes
+{% endblock %}
+
 {% block extrahead %}
 <style type="text/css">
 .filter ul li {
@@ -87,41 +91,23 @@ Theme List | Dreamwidth Styles
 {% endif %}
 
 <div class="pagination">
-<p>Themes appear from newest to oldest. Total themes listed: {{ themes.paginator.count }}</p>
-    <span class="step-links">
-        {% if themes.has_previous %}
-            <a href="{% url "dwstyles:theme_list" page=themes.previous_page_number %}?{{query.urlencode}}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ themes.number }} of {{ themes.paginator.num_pages }}. 
-        </span>
-
-        {% if themes.has_next %}
-            <a href="{% url "dwstyles:theme_list" page=themes.next_page_number %}?{{query.urlencode}}">next</a>
-        {% endif %}
-    </span>
+<p>Themes appear from newest to oldest. Total themes listed: {{ paginator.count }}</p>
+{% with "dwstyles:theme_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
 </div>
 
-{% with themes.object_list as themes %}
-{% include "list_templates/themes.html" %}
-{% endwith %}
+<ul class="themelist">
+{% for theme in theme_list %}
+{% include "list_templates/themebox.html" %}
+{% endfor %}
+</ul>
+<div class="clear"></div>
 
 <div class="pagination">
-<p>Themes appear from newest to oldest. Total themes listed: {{ themes.paginator.count }}</p>
-    <span class="step-links">
-        {% if themes.has_previous %}
-            <a href="{% url "dwstyles:theme_list" page=themes.previous_page_number %}?{{query.urlencode}}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ themes.number }} of {{ themes.paginator.num_pages }}.
-        </span>
-
-        {% if themes.has_next %}
-            <a href="{% url "dwstyles:theme_list" page=themes.next_page_number %}?{{query.urlencode}}">next</a>
-        {% endif %}
-    </span>
+{% with "dwstyles:theme_list" as base_url %}
+{% include "utility/step_links.html" %}
+{% endwith %}
 </div>
 
 {% endblock %}

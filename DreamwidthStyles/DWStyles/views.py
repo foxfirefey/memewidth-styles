@@ -18,14 +18,6 @@ from django.views.generic import DetailView, ListView, TemplateView
 from DWStyles.models import *
 from DWStyles.forms import *
 
-def add_message(context, message):
-    """Adds a message to the messages in the context.  Creates them if they don't exist."""
-    
-    if not "messages" in context:
-        context["messages"] = []
-    
-    context["messages"].append(message)
-
 class HomeView(TemplateView):
 
     template_name = "home.html"

@@ -303,17 +303,6 @@ class ColorPropertyDetailView(DetailView):
 
         return obj
 
-def colorgroup_list(request):
-    
-    c = { 
-        "characteristics": ColorPropertyGroup.get_characteristics(),
-        "colors": ColorPropertyGroup.get_colors(),
-        "title": "Color Groups",
-    }
-    
-    return render_to_response('colorgroup_list.html', c, 
-        context_instance=RequestContext(request))
-
 class ColorGroupListView(TemplateView):
 
     template_name = "DWStyles/colorgroup_list.html"

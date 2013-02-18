@@ -6,16 +6,17 @@ from .views import DWThemeDetailView
 
 from .views import DWLayoutListView
 from .views import DWThemeListView
+from .views import ColorGroupListView
 
 from .views import StatsView
 from .views import HomeView
+
 
 urlpatterns = patterns('DWStyles.views',
     url(r'^admin/color_layer_copy$', "color_layer_copy", name="color_layer_copy"),
 
     # list views
     url(r'^colors/(?P<page>[0-9]+)?$', "color_list", name="color_list"),
-    url(r'^colorgroups/?$', "colorgroup_list", name="colorgroup_list"),
 
     # detail views
     url(r'^colorgroup/(?P<codename>[a-zA-Z0-9_s]+)/(?P<page>[0-9]+)?$', 
@@ -27,6 +28,7 @@ urlpatterns += patterns('',
     # template views
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^stats/?$', StatsView.as_view(), name="stats"),
+    url(r'^colorgroups/?$', ColorGroupListView.as_view(), name="colorgroup_list"),
 
     # list views
     url(r'^layouts$', DWLayoutListView.as_view(), name="layout_list"),

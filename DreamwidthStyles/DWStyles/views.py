@@ -314,6 +314,20 @@ def colorgroup_list(request):
     return render_to_response('colorgroup_list.html', c, 
         context_instance=RequestContext(request))
 
+class ColorGroupListView(TemplateView):
+
+    template_name = "DWStyles/colorgroup_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ColorGroupListView, self).get_context_data(**kwargs)
+
+        context.update({ 
+            "characteristics": ColorPropertyGroup.get_characteristics(),
+            "colors": ColorPropertyGroup.get_colors(),
+        })
+        
+        return context
+
 def colorgroup_colorlist(request, codename, page=1):
     
     colorgroup = ColorPropertyGroup.objects.get(codename = codename)

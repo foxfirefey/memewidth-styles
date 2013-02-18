@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 from DWStyles.models import *
 from DWStyles.forms import *
@@ -30,39 +30,43 @@ def home(request):
     return render_to_response('home.html', {'title': "Home"},
         context_instance=RequestContext(request))
 
-def stats(request):
+class StatsView(TemplateView):
 
-    c = {'title': 'Stats'}
-    c['theme_counts'] = DWTheme.objects.values("layout", "layout__name").annotate(themes=Count('layout')).order_by('-themes')
-    c['total_themes'] = sum([count['themes'] for count in c['theme_counts']])
-    c['total_layouts'] = len(c['theme_counts'])
+    template_name = "DWStyles/stats.html"
 
-    tally_properties = ["dw-free", "dw-nonfree", "dark-on-light", "light-on-dark", 
-        "high-contrast", "low-contrast", 
+    tally_properties = ["dw-free", "dw-nonfree", "dark-on-light", "light-on-dark",
+        "high-contrast", "low-contrast",
         "one-column", "three-column-center", "three-column-left", "three-column-right", "two-column-left", "two-column-right"]
 
-    property_counts = []
+    def get_context_data(self, **kwargs):
 
-    for property in tally_properties:
-        pc = dict() 
-        p = StyleProperty.objects.get(codename=property)
-        pc["property"] = p
+        context = super(StatsView, self).get_context_data(**kwargs)
 
-        if p.theme_use:
-            pc["theme_count"] = DWTheme.objects.filter(properties__pk = p.pk ).count()
-        else:
-            pc["theme_count"] = DWTheme.objects.filter(layout__properties__pk = p.pk ).count()
+        context['theme_counts'] = DWTheme.objects.values("layout", "layout__name").annotate(themes=Count('layout')).order_by('-themes')
+        context['total_themes'] = sum([count['themes'] for count in context['theme_counts']])
+        context['total_layouts'] = len(context['theme_counts'])
 
-        if p.layout_use:
-            pc["layout_count"] = DWLayout.objects.filter(properties__pk = p.pk ).count()
-        else:
-            pc["layout_count"] = 0
-        property_counts.append(pc)
+        property_counts = []
 
-    c['property_counts'] = property_counts
+        for property in self.tally_properties:
+            pc = dict()
+            p = StyleProperty.objects.get(codename=property)
+            pc["property"] = p
 
-    return render_to_response('stats.html', c,
-        context_instance=RequestContext(request))
+            if p.theme_use:
+                pc["theme_count"] = DWTheme.objects.filter(properties__pk = p.pk).count()
+            else:
+                pc["theme_count"] = DWTheme.objects.filter(layout__properties__pk = p.pk).count()
+
+            if p.layout_use:
+                pc["layout_count"] = DWLayout.objects.filter(properties__pk = p.pk).count()
+            else:
+                pc["layout_count"] = 0
+
+            property_counts.append(pc)
+
+        context['property_counts'] = property_counts
+        return context
 
 class DWLayoutListView(ListView):
 

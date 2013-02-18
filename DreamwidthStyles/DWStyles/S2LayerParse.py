@@ -1,6 +1,6 @@
 import re
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from .models import ColorProperty, DWThemeColor, DWTheme
 

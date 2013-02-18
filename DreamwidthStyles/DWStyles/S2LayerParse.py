@@ -77,7 +77,7 @@ class S2LayerParse(object):
         except MultipleObjectsReturned:
             self.theme = None
 
-        if self.theme = None
+        if self.theme == None:
             return
         
         self.existing_themecolors = {}

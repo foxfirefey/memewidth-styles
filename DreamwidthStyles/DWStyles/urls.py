@@ -25,9 +25,9 @@ urlpatterns += patterns('',
     url(r'^colorgroups/?$', ColorGroupListView.as_view(), name="colorgroup_list"),
 
     # list views
-    url(r'^layouts$', DWLayoutListView.as_view(), name="layout_list"),
-    url(r'^themes$', DWThemeListView.as_view(), name="theme_list"),
-    url(r'^colors$', ColorPropertyListView.as_view(), name="color_list"),
+    url(r'^layouts/?$', DWLayoutListView.as_view(), name="layout_list"),
+    url(r'^themes/?$', DWThemeListView.as_view(), name="theme_list"),
+    url(r'^colors/?$', ColorPropertyListView.as_view(), name="color_list"),
 
     # detail views
     url(r'^color/(?P<slug>[a-fA-F0-9]+)$', ColorPropertyDetailView.as_view(), name='color_view'),

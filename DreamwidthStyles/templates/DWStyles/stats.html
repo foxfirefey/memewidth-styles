@@ -41,7 +41,7 @@ Stats
 {% for layout in theme_counts %}
 
 <tr class="{% cycle "odd" "even" %}"><th class="layout">
-<a href="http://styles.memewidth.org/layout/{{layout.layout}}">{{ layout.layout__name }}</a></th>
+ <a href="{% url "dwstyles:layout_view" pk=layout.layout %}">{{ layout.layout__name }}</a></th> 
 <td class="count">{{ layout.themes }}</td></tr>
 
 {% endfor %}
@@ -61,7 +61,7 @@ Stats
 <tbody>
 {% for pinfo in property_counts %}
 {% if pinfo.property.layout_use %}
-<tr class="{% cycle "odd" "even" %}"><th class="property"><a href="http://styles.memewidth.org/layouts/?filter={{pinfo.property.codename}}">{{ pinfo.property }}</a></th>
+<tr class="{% cycle "odd" "even" %}"><th class="property"><a href="{% url "dwstyles:layout_list" %}?filter={{pinfo.property.codename}}">{{ pinfo.property }}</a></th>
 <td class="count">{{ pinfo.layout_count }}</td></tr>
 {% endif %}
 {% endfor %}
@@ -78,7 +78,7 @@ Stats
 </thead>
 <tbody>
 {% for pinfo in property_counts %}
-<tr class="{% cycle "odd" "even" %}"><th class="property"><a href="{% if pinfo.property.theme_use %}http://styles.memewidth.org/themes/?themefilter={{pinfo.property.codename}}{% else %}http://styles.memewidth.org/themes/?layoutfilter={{pinfo.property.codename}}{%endif%}">{{ pinfo.property}}</a></th>
+<tr class="{% cycle "odd" "even" %}"><th class="property"><a href="{% url "dwstyles:layout_list" %}{% if pinfo.property.theme_use %}?themefilter={{pinfo.property.codename}}{% else %}?layoutfilter={{pinfo.property.codename}}{%endif%}">{{ pinfo.property}}</a></th>
 <td class="count">{{ pinfo.theme_count }}</td></tr>
 {% endfor %}
 </tbody>
